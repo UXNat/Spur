@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blink → Blur + Fade</title>
+
+  <!-- MediaPipe -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+    }
+
+    video {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Webcam -->
+  <video id="webcam" autoplay playsinline></video>
+
+  <!-- Video you want to manipulate -->
+  <video id="video" src="yumi_biscuits.mp4" autoplay loop muted></video>
+
+  <!-- Output -->
+  <canvas id="canvas"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
