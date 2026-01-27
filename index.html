@@ -22,19 +22,19 @@
     }
 
     video {
-      display: none;
+      display: none; /* hide webcam & video elements */
     }
   </style>
 </head>
 <body>
 
-  <!-- Webcam -->
-  <video id="webcam" autoplay playsinline></video>
+  <!-- Webcam for blink detection -->
+  <video id="webcam" autoplay playsinline muted></video>
 
-  <!-- Video you want to manipulate -->
-  <video id="video" src="yumi_biscuits.mp4" autoplay loop muted></video>
+  <!-- Video to manipulate -->
+  <video id="video" src="yumi_biscuits.mp4" loop muted playsinline></video>
 
-  <!-- Output -->
+  <!-- Canvas output -->
   <canvas id="canvas"></canvas>
 
   <script src="script.js"></script>
