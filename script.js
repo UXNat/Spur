@@ -2,6 +2,7 @@ const webcam = document.getElementById("webcam");
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+const overlay = document.getElementById("startOverlay");
 
 // ----------------------------
 // Fullscreen canvas
@@ -18,21 +19,23 @@ resizeCanvas();
 // ----------------------------
 const LEFT_EYE = [33, 160, 158, 133, 153, 144];
 const RIGHT_EYE = [362, 385, 387, 263, 373, 380];
+
 const EAR_THRESHOLD = 0.25;
 let blinkDetected = false;
 
 // ----------------------------
-// Blur + fade
+// Blur + fade values
 // ----------------------------
 let blurLevel = 0;
 const BLUR_STEP = 4;
 const MAX_BLUR = 40;
+
 let fadeProgress = 0.0;
 const FADE_STEP = 0.05;
 const MAX_FADE = 1.0;
 
 // ----------------------------
-// Helper: Eye Aspect Ratio
+// EAR helpers
 // ----------------------------
 function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
@@ -49,7 +52,8 @@ function eyeAspectRatio(eye) {
 // MediaPipe FaceMesh
 // ----------------------------
 const faceMesh = new FaceMesh({
-  locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+  locateFile: file =>
+    `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
 });
 
 faceMesh.setOptions({
@@ -60,7 +64,7 @@ faceMesh.setOptions({
 faceMesh.onResults(onResults);
 
 // ----------------------------
-// Webcam setup
+// Webcam
 // ----------------------------
 const camera = new Camera(webcam, {
   onFrame: async () => {
@@ -69,7 +73,6 @@ const camera = new Camera(webcam, {
   width: 640,
   height: 480
 });
-camera.start();
 
 // ----------------------------
 // Blink detection
@@ -77,20 +80,20 @@ camera.start();
 function onResults(results) {
   if (!results.multiFaceLandmarks) return;
 
-  const landmarks = results.multiFaceLandmarks[0];
-  const leftEye = LEFT_EYE.map(i => landmarks[i]);
-  const rightEye = RIGHT_EYE.map(i => landmarks[i]);
+  const lm = results.multiFaceLandmarks[0];
+  const leftEye = LEFT_EYE.map(i => lm[i]);
+  const rightEye = RIGHT_EYE.map(i => lm[i]);
 
-  const ear = (eyeAspectRatio(leftEye) + eyeAspectRatio(rightEye)) / 2;
+  const ear =
+    (eyeAspectRatio(leftEye) + eyeAspectRatio(rightEye)) / 2;
 
   if (ear < EAR_THRESHOLD && !blinkDetected) {
     blinkDetected = true;
 
-    // Update blur and fade
     blurLevel = Math.min(blurLevel + 1, MAX_BLUR / BLUR_STEP);
     fadeProgress = Math.min(fadeProgress + FADE_STEP, MAX_FADE);
 
-    console.log("Blink detected!", blurLevel, fadeProgress.toFixed(2));
+    console.log("Blink", blurLevel, fadeProgress.toFixed(2));
   }
 
   if (ear >= EAR_THRESHOLD) {
@@ -99,7 +102,7 @@ function onResults(results) {
 }
 
 // ----------------------------
-// Draw loop
+// Render loop
 // ----------------------------
 function draw() {
   requestAnimationFrame(draw);
@@ -109,7 +112,11 @@ function draw() {
   const vw = video.videoWidth;
   const vh = video.videoHeight;
 
-  const scale = Math.max(canvas.width / vw, canvas.height / vh);
+  const scale = Math.max(
+    canvas.width / vw,
+    canvas.height / vh
+  );
+
   const w = vw * scale;
   const h = vh * scale;
   const x = (canvas.width - w) / 2;
@@ -120,14 +127,20 @@ function draw() {
   ctx.drawImage(video, x, y, w, h);
   ctx.filter = "none";
 
-  // Fade to black
+  // Fade
   ctx.fillStyle = `rgba(0,0,0,${fadeProgress})`;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 // ----------------------------
-// Start video and draw loop
+// START (required for audio)
 // ----------------------------
-video.addEventListener("canplay", () => video.play());
-webcam.addEventListener("canplay", () => webcam.play());
-draw();
+overlay.addEventListener("click", async () => {
+  overlay.style.display = "none";
+
+  await video.play();   // sound allowed after click
+  await webcam.play();
+  camera.start();
+
+  draw();
+});

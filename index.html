@@ -22,19 +22,39 @@
     }
 
     video {
-      display: none; /* hide webcam & video elements */
+      display: none;
+    }
+
+    #startOverlay {
+      position: fixed;
+      inset: 0;
+      background: black;
+      color: white;
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <!-- Webcam for blink detection -->
+  <!-- CLICK TO START OVERLAY -->
+  <div id="startOverlay">
+    CLICK TO START<br>
+    (Camera + Sound)
+  </div>
+
+  <!-- Webcam -->
   <video id="webcam" autoplay playsinline muted></video>
 
-  <!-- Video to manipulate -->
-  <video id="video" src="yumi_biscuits.mp4" loop muted playsinline></video>
+  <!-- Video WITH SOUND -->
+  <video id="video" src="yumi_biscuits.mp4" loop playsinline></video>
 
-  <!-- Canvas output -->
+  <!-- Output -->
   <canvas id="canvas"></canvas>
 
   <script src="script.js"></script>
