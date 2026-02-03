@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Blink → Blur + Fade</title>
+  <title>Blink Blur Video</title>
 
   <!-- MediaPipe -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
@@ -14,6 +14,7 @@
       padding: 0;
       overflow: hidden;
       background: black;
+      cursor: pointer;
     }
 
     canvas {
@@ -25,36 +26,27 @@
       display: none;
     }
 
-    #startOverlay {
+    #hint {
       position: fixed;
       inset: 0;
-      background: black;
-      color: white;
-      font-size: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
+      color: white;
+      font-family: sans-serif;
+      font-size: 18px;
+      background: black;
       z-index: 10;
-      text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <!-- CLICK TO START OVERLAY -->
-  <div id="startOverlay">
-    CLICK TO START<br>
-    (Camera + Sound)
-  </div>
+  <div id="hint">click anywhere to start</div>
 
-  <!-- Webcam -->
   <video id="webcam" autoplay playsinline muted></video>
+  <video id="video" src="yumi_biscuits.mp4" playsinline></video>
 
-  <!-- Video WITH SOUND -->
-  <video id="video" src="yumi_biscuits.mp4" loop playsinline></video>
-
-  <!-- Output -->
   <canvas id="canvas"></canvas>
 
   <script src="script.js"></script>
