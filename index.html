@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Blink Blur Video</title>
+  <title>Blink → Blur + Fade</title>
 
   <!-- MediaPipe -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
@@ -14,7 +14,6 @@
       padding: 0;
       overflow: hidden;
       background: black;
-      cursor: pointer;
     }
 
     canvas {
@@ -23,30 +22,19 @@
     }
 
     video {
-      display: none;
-    }
-
-    #hint {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-family: sans-serif;
-      font-size: 18px;
-      background: black;
-      z-index: 10;
+      display: none; /* hide webcam & video elements */
     }
   </style>
 </head>
 <body>
 
-  <div id="hint">click anywhere to start</div>
-
+  <!-- Webcam for blink detection -->
   <video id="webcam" autoplay playsinline muted></video>
-  <video id="video" src="yumi_biscuits.mp4" playsinline></video>
 
+  <!-- Video to manipulate -->
+  <video id="video" src="yumi_biscuits.mp4" loop muted playsinline></video>
+
+  <!-- Canvas output -->
   <canvas id="canvas"></canvas>
 
   <script src="script.js"></script>
