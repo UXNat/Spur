@@ -28,7 +28,7 @@ let blurLevel = 0;
 const BLUR_STEP = 4;
 const MAX_BLUR = 40;
 let fadeProgress = 0.0;
-const FADE_STEP = 0.05;
+const FADE_STEP = 0.08;
 const MAX_FADE = 1.0;
 
 // ----------------------------
